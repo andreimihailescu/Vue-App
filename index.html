@@ -16,12 +16,24 @@
             {{ modalMessage }}
         </modal>
 
+        <confirmModal v-if="showConfirmModal" @close-confirm="showConfirmModal = false">
+            <template slot="header">My title</template>
+
+            This is the content of the modal.
+
+            <div slot="footer">
+                <button class="button is-success">Save changes</button>
+                <button class="button">Cancel</button>
+            </div>
+        </confirmModal>
+
         <tabs>
             <tab name="Home" :selected="true">
                 <message title="Home message" body="This is the home page."></message>
             </tab>
             <tab name="Show modal">
                 <button @click="showModal = true">Show modal</button>
+                <button @click="showConfirmModal = true">Show confirm modal</button>
             </tab>
             <tab name="Taks list">
                 <task-list></task-list>
@@ -29,6 +41,16 @@
             <tab name="Component communication">
                 <coupon @applied="onCouponApplied"></coupon>
                 <h1 v-if="couponApplied">You used a coupon!</h1>
+            </tab>
+            <tab name="Progress view">
+                <progress-view inline-template>
+                    <div>
+                        <h1>Completion rate is {{ completionRate }}%</h1>
+                        <p>
+                            <button @click="completionRate += 10">Update completion rate</button>
+                        </p>
+                    </div>
+                </progress-view>
             </tab>
             <tab name="About">
                 <h1>This is the about page.</h1>

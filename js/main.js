@@ -1,7 +1,9 @@
+window.Event = new Vue();
+
 Vue.component('task-list', {
     template: `
         <div>
-            <task v-for="task in tasks">{{ task.task }}</task>
+            <task v-for="task in tasks" :key="task.task">{{ task.task }}</task>
         </div>
     `,
     data() {
@@ -116,11 +118,55 @@ Vue.component('tab', {
 
 Vue.component('coupon', {
     template: `
-        <input placeholder="Enter your coupon code" @blur="onCouponApplied">
+        <div>
+            <input type="text" v-model="name" placeholder="Enter your coupon code" @blur="onCouponApplied">
+        </div>
     `,
+    data: function () {
+        return {
+            name: ''
+        }
+    },
     methods: {
         onCouponApplied() {
             this.$emit('applied');
+            Event.$emit('global-applied', {
+                name: this.name
+            });
+        }
+    }
+});
+
+Vue.component('confirmmodal', {
+    template: `
+        <div class="modal is-active">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">
+                        <slot name="header"></slot>
+                    </p>
+
+                    <button class="delete" aria-label="close" @click="$emit('close-confirm')"></button>
+                </header>
+
+                <section class="modal-card-body">
+                    <slot></slot>
+                </section>
+
+                <footer class="modal-card-foot">
+                    <slot name="footer"></slot>
+                    
+                </footer>
+            </div>
+        </div>
+    `
+});
+
+Vue.component('progress-view', {
+    data() {
+        return {
+            completionRate: 0
         }
     }
 });
@@ -129,6 +175,7 @@ new Vue({
     el: '#root',
     data: {
         showModal: false,
+        showConfirmModal: false,
         modalMessage: 'Blablabla',
         couponApplied: false
     },
@@ -136,5 +183,8 @@ new Vue({
         onCouponApplied() {
             this.couponApplied = true;
         }
+    },
+    created() {
+        Event.$on('global-applied', (payload) => alert('Handiling coupon ' + payload.name + '.'))
     }
 });
