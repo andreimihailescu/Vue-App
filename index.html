@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Vue App</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+    <div id="root" class="container">
+        <h1 class="title">Vue App</h1>
+
+        <modal v-if="showModal" @close="showModal = false">
+            {{ modalMessage }}
+        </modal>
+
+        <tabs>
+            <tab name="Home" :selected="true">
+                <message title="Home message" body="This is the home page."></message>
+            </tab>
+            <tab name="Show modal">
+                <button @click="showModal = true">Show modal</button>
+            </tab>
+            <tab name="Taks list">
+                <task-list></task-list>
+            </tab>
+            <tab name="Component communication">
+                <coupon @applied="onCouponApplied"></coupon>
+                <h1 v-if="couponApplied">You used a coupon!</h1>
+            </tab>
+            <tab name="About">
+                <h1>This is the about page.</h1>
+            </tab>
+        </tabs>
+    </div>
+
+    <script src="./js/main.js"></script>
+</body>
+
+</html>
